@@ -1,0 +1,23 @@
+.card{
+  overflow: hidden;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 0 1px var(--hover-shade);
+}
+.profile-pic{
+  margin-top: -25px;
+}
+.asset-area textarea{
+  margin-top: 1.5rem;
+  border: 0;
+  outline: none;
+}
+.asset-area input{
+  padding: 0.5em;
+  border: 0;
+  outline: none;
+  border: 1px solid var(--hover-shade)
+}
+.asset-area input:focus{
+  border: none;
+  outline: none;
+}
