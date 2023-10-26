@@ -4,12 +4,13 @@ import Section from '../UI/Section/Section'
 import { ButtonPrimary, ButtonSecondary } from '../UI/Styled-UI/StyledElements'
 import { useDispatch, useSelector } from 'react-redux'
 import { signInAPI } from '../../redux/actions'
-import { setUser } from '../../redux/actions/actions'
-import { useNavigate, useNavigation } from 'react-router-dom'
+import { setGuestMode, setUser } from '../../redux/actions/actions'
+import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 const Login = () => {
-  const user = useSelector(state=> state.userState.user )
+  const userState = useSelector(state=> state.userState )
+  const user = userState.user;
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const submitHandler = (e)=>{
@@ -17,7 +18,8 @@ const Login = () => {
     dispatch(signInAPI())
   }
   const guestHandler = ()=>{
-    dispatch(setUser({displayName:'Guest User'}))
+    dispatch(setUser({displayName:'Guest User', email: 'guest@linkedIn-clone.com'}));
+    dispatch(setGuestMode(true));
   }
   useEffect(() => {
     if(user){
@@ -36,7 +38,7 @@ const Login = () => {
             <Stack gap={2}>
             <ButtonPrimary className='d-flex justify-content-center gap-2 w-100' type='submit'>
               <img src="./images/google.svg" alt="" />
-              Sign Up with Google
+              Continue with Google
             </ButtonPrimary>
             <ButtonSecondary className='d-flex justify-content-center gap-2 w-100' type='button' style={{textDecoration: 'underline'}} onClick={guestHandler} >
               Continue as guist 🠆

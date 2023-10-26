@@ -20,7 +20,7 @@ const MainNav = () => {
           </SearchIcon>
         </div>
         <NavList className=' d-flex gap-1 gap-md-2 gap-lg-4 nav-list '>
-          {['home','messaging', 'jobs', 'network', 'notifications','work',].map(item=> <NavListItem to={`/${item}`} iconPath={`/images/nav-${item}.svg`} title={item}/>)}
+          {['home','messaging', 'jobs', 'network', 'notifications','work',].map(item=> <NavListItem key={item} to={`/${item}`} iconPath={`/images/nav-${item}.svg`} title={item}/>)}
           <UserNavItem photoURL = {user?.photoURL || null}/>
         </NavList>
       </Container>

@@ -8,7 +8,7 @@ const RouterWrapper = ({children}) => {
   const ROUTER = createBrowserRouter([
 
     {path: '/', element: <Login/> },
-    {path: '/home', element:<RequireAuth><HomeRoot/></RequireAuth>, children: [
+    {path: '/home', element:<HomeRoot/>, children: [
       {index: true,
       element: <HomePage/>},
     ]},

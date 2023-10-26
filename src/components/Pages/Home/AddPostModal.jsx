@@ -6,16 +6,57 @@ import {
 } from "../../UI/Styled-UI/StyledElements";
 import { useState } from "react";
 import ReactPlayer from "react-player";
-const AddPostModal = ({ show, handleClose, user }) => {
+import { Timestamp } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { newGuestPost, newPostAPI } from "../../../redux/actions";
+
+const AddPostModal = ({ show, handleClose, user, guestMode }) => {
   const [assetArea, setAssetArea] = useState("");
   const [videoURL, setVideoURL] = useState("");
   const [imageURL, setImageURL] = useState('');
   const [postDetails, setPostDetails] = useState("");
+  const dispatch = useDispatch()
   const reset = ()=>{
     setAssetArea('');
     setVideoURL('');
     setImageURL('');
     setPostDetails('');
+  }
+  // for handling image file uploads
+  const handleImageUpload = (e)=>{
+    const image = e.target.files[0];
+    if(image === "" || image === undefined){
+      alert( `not supported image, the file is a ${typeof image}`)
+      return
+    }
+    setImageURL(image);
+  }
+  // handling new post creation
+  const handlerNewPost = (e)=>{
+    e.preventDefault();
+    if(e.target !== e.currentTarget)return;
+
+    const payload={
+      user: user,
+      timeStamp: Timestamp.now(),
+      postDetails: postDetails,
+      assetType: assetArea,
+      image: imageURL,
+      video: videoURL,
+    }
+
+    // handle guist user  here
+    // ------------------
+    // 
+    if(guestMode){
+      dispatch(newGuestPost(payload))
+    }else{
+      dispatch(newPostAPI(payload))
+    }
+
+    //close the modal
+    handleClose();
+    reset()
   }
   return (
     <Modal show={show} onHide={()=>{handleClose(); reset();}} size="md"  >
@@ -74,12 +115,9 @@ const AddPostModal = ({ show, handleClose, user }) => {
                 name="image"
                 id="file"
                 className="d-none"
-                value={imageURL}
-                onChange={(e) => {
-                  setImageURL(e.target.value);
-                }}
+                onChange={handleImageUpload}
               />
-              <p>
+              <p className='p-2' style={{border: '3px dashed rgba(0,0,0,0.6)'}}>
                 <label
                   htmlFor="file"
                   style={{ textDecoration: "underline", cursor: "pointer" }}
@@ -91,7 +129,7 @@ const AddPostModal = ({ show, handleClose, user }) => {
             </>
           )}
           {assetArea === "image" && imageURL && (
-            <img src={imageURL  } alt="post image" />
+            <img src={URL.createObjectURL(imageURL)  } alt="post image" />
           )}
         </Stack>
       </Modal.Body>
@@ -106,7 +144,7 @@ const AddPostModal = ({ show, handleClose, user }) => {
           <ButtonPrimary
             className="ms-auto"
             disabled={postDetails.length === 0}
-            onClick={() => console.log("posint")}
+            onClick={handlerNewPost}
           >
             Post
           </ButtonPrimary>

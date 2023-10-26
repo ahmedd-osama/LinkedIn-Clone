@@ -9,8 +9,10 @@ const articlesReducer = (state=initialState, {type, payload})=>{
   switch(type){
     case actions.SET_ARTICLES_LOADING : 
       return {...state, isLoading: payload};
-    case actions.GET_ARTICLES : 
+      case actions.GET_ARTICLES : 
       return {...state, articles: payload};
+      case actions.GUEST_POST : 
+      return {...state, articles: [payload, ...state.articles]};
     default: 
     return state;
   }
